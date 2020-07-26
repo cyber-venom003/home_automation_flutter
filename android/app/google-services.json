@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "225760898519",
+    "firebase_url": "https://warehouse-automation-2aa73.firebaseio.com",
+    "project_id": "warehouse-automation-2aa73",
+    "storage_bucket": "warehouse-automation-2aa73.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:225760898519:android:b5593102194aa363ceaf92",
+        "android_client_info": {
+          "package_name": "com.cybervenom003.warehouseautomationflutter"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "225760898519-qjkboo9jqenbgcm07o19no4i7djbamu5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDtgtOb3OiXCWM6BEOOr6-sihXrB6yPsl0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "225760898519-qjkboo9jqenbgcm07o19no4i7djbamu5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
