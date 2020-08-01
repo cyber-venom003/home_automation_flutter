@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import './registerScreen.dart';
 
 class StartScreen extends StatelessWidget {
   @override
@@ -22,7 +23,9 @@ class StartScreen extends StatelessWidget {
                 Image.asset('assets/images/smart-home-png-2.png'),
                 SizedBox(height: 5,),
                 FlatButton(
-                  onPressed: null,
+                  onPressed: (){
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => RegisterScreen(option: "Sign Up")));
+                  },
                   child: Container(
                   width: 180,
                   height: 55,
@@ -58,9 +61,10 @@ class StartScreen extends StatelessWidget {
                 ),
               ),
             ),
-                SizedBox(height: 5,),
                 GestureDetector(
-                  onTap: null,
+                  onTap: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => RegisterScreen(option: "Sign In")));
+                  },
                   child: Text(
                     'Already have an account? Sign In',
                     style: TextStyle(
