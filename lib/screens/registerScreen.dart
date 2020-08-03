@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../Utils/authHandler.dart';
+import 'package:firebase_database/firebase_database.dart';
 
 class RegisterScreen extends StatefulWidget {
   RegisterScreen({@required this.option});
@@ -11,6 +12,7 @@ class RegisterScreen extends StatefulWidget {
 class _RegisterScreenState extends State<RegisterScreen> {
   _RegisterScreenState({@required this.option});
   final String option;
+  final ref = FirebaseDatabase.instance.reference();
   TextEditingController _emailController;
   TextEditingController _passwordController;
   bool isLoading = false;
@@ -37,7 +39,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               style: TextStyle(
                 fontFamily: "Segoe UI",
                 fontSize: 20,
-                color:Color(0xfff67300),
+                color:Color(0xff007d2a),
               ),
             ),
             content: SingleChildScrollView(
@@ -53,7 +55,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 child: Text(
                   'Dismiss',
                   style: TextStyle(
-                    color:Color(0xfff67300),
+                    color:Color(0xff007d2a),
                   ),
                 ),
                 onPressed: () {
@@ -68,12 +70,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      backgroundColor: Color(0xFFFCF3EE),
       body: Padding(
           padding: EdgeInsets.symmetric(horizontal: 26.5 , vertical: 5),
           child: isLoading ? Center(
               child: CircularProgressIndicator(
-                  valueColor: AlwaysStoppedAnimation<Color>(Color(0xfff67300))
+                  valueColor: AlwaysStoppedAnimation<Color>(Color(0xff007d2a))
               )
           )
               : new Column(
@@ -81,11 +82,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               new Text(
-                "$option here to write your food blog",
+                "$option here to activate your home automation service",
                 style: TextStyle(
                   fontFamily: "Segoe UI",
                   fontSize: 35.5,
-                  color:Color(0xfff67300),
+                  color:Color(0xff007d2a),
                 ),
               ),
               new TextField(
@@ -93,17 +94,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 keyboardType: TextInputType.emailAddress,
                 decoration: InputDecoration(
                   hintText: "Username",
-                  icon: Icon(Icons.alternate_email , color: Color(0xFFF67300) , size: 22.5),
+                  icon: Icon(Icons.alternate_email , color: Color(0xFF007d2a) , size: 22.5),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(17.5)),
-                    borderSide: BorderSide(color: Color(0xFFF67300) , width: 1),
+                    borderSide: BorderSide(color: Color(0xFF007d2a) , width: 1),
                   ),
                   enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Color(0xFFF67300), width: 1.0),
+                    borderSide: BorderSide(color: Color(0xFF007d2a), width: 1.0),
                     borderRadius: BorderRadius.all(Radius.circular(17.5)),
                   ),
                   focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Color(0xFFF67300), width: 2.0),
+                    borderSide: BorderSide(color: Color(0xFF007d2a), width: 2.0),
                     borderRadius: BorderRadius.all(Radius.circular(17.5)),
                   ),
                 ),
@@ -113,17 +114,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 obscureText: true,
                 decoration: InputDecoration(
                   hintText: "Password",
-                  icon: Icon(Icons.vpn_key , color: Color(0xFFF67300) , size: 22.5),
+                  icon: Icon(Icons.vpn_key , color: Color(0xFF007d2a) , size: 22.5),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(17.5)),
-                    borderSide: BorderSide(color: Color(0xFFF67300) , width: 1),
+                    borderSide: BorderSide(color: Color(0xFF007d2a) , width: 1),
                   ),
                   enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Color(0xFFF67300), width: 1.0),
+                    borderSide: BorderSide(color: Color(0xFF007d2a), width: 1.0),
                     borderRadius: BorderRadius.all(Radius.circular(17.5)),
                   ),
                   focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Color(0xFFF67300), width: 2.0),
+                    borderSide: BorderSide(color: Color(0xFF007d2a), width: 2.0),
                     borderRadius: BorderRadius.all(Radius.circular(17.5)),
                   ),
                 ),
@@ -151,7 +152,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           setState(() {
                             isLoading = false;
                           });
-                          Navigator.pushNamed(context, 'Regis_Screen');
+                          ref.child('users/${AuthHandler.user.uid}/email').set(_emailController.text);
+                          ref.child('users/${AuthHandler.user.uid}/isAuthenticated').set(false);
+                          Navigator.pushNamed(context, 'Switch_DashBoard');
                         }
                       }
                       catch(error){
@@ -177,7 +180,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           setState(() {
                             isLoading = false;
                           });
-                          Navigator.of(context).pushNamedAndRemoveUntil('Item_Screen', (route) => false);
+                          Navigator.pushNamed(context, 'Switch_DashBoard');
                         }
                       }
                       catch(error){
@@ -209,7 +212,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       new Text(
-                        'Activate Service',
+                        option == "Sign Up" ? "Activate Service" : "Sign In",
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontFamily: "Segoe UI",

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import './screens/startScreen.dart';
-import './screens/registerScreen.dart';
 import './screens/dashboard.dart';
 
 void main() {
@@ -14,7 +13,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        primarySwatch: Colors.teal,
+        primarySwatch: Colors.green,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: StartScreen(),
