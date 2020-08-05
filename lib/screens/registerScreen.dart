@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:warehouseautomationflutter/screens/dashboard.dart';
 import '../Utils/authHandler.dart';
 import 'package:firebase_database/firebase_database.dart';
 
@@ -154,7 +155,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           });
                           ref.child('users/${AuthHandler.user.uid}/email').set(_emailController.text);
                           ref.child('users/${AuthHandler.user.uid}/isAuthenticated').set(false);
-                          Navigator.pushNamed(context, 'Switch_DashBoard');
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => SwitchDashBoard(uid: "${AuthHandler.user.uid}")));
                         }
                       }
                       catch(error){
@@ -180,7 +181,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           setState(() {
                             isLoading = false;
                           });
-                          Navigator.pushNamed(context, 'Switch_DashBoard');
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => SwitchDashBoard(uid: "${AuthHandler.user.uid}")));
                         }
                       }
                       catch(error){

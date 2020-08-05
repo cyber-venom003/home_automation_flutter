@@ -1,14 +1,17 @@
+import './startScreen.dart';
 import 'package:flutter/material.dart';
 import '../Utils/authHandler.dart';
 import 'package:firebase_database/firebase_database.dart';
 
 class SwitchDashBoard extends StatefulWidget {
+  SwitchDashBoard({@required this.uid});
+  final String uid;
   @override
   _SwitchDashBoardState createState() => _SwitchDashBoardState();
 }
 class _SwitchDashBoardState extends State<SwitchDashBoard> {
   final AuthHandler AuthService = AuthHandler();
-  static final userRef = FirebaseDatabase.instance.reference().child('users/${AuthHandler.user.uid}');
+  static final userRef = FirebaseDatabase.instance.reference();
   bool userAuth;
 //  bool devStatus = false;
   String deviceName;
@@ -43,7 +46,7 @@ class _SwitchDashBoardState extends State<SwitchDashBoard> {
                   ),
                 ),
                 onPressed: () {
-                  userRef.child('devices/$deviceName').set(false);
+                  userRef.child('users/${widget.uid}').child('devices/$deviceName').set(false);
                   Navigator.of(context).pop();
                 },
               ),
@@ -55,7 +58,7 @@ class _SwitchDashBoardState extends State<SwitchDashBoard> {
   @override
   void initState() {
     super.initState();
-    userRef.child('isAuthenticated').onValue.listen((event) {
+    userRef.child('users/${widget.uid}').child('isAuthenticated').onValue.listen((event) {
       var snapshot = event.snapshot;
       setState(() {
         userAuth = snapshot.value;
@@ -76,6 +79,7 @@ class _SwitchDashBoardState extends State<SwitchDashBoard> {
                   onPressed: () {
                     AuthService.signOutUser();
                     Navigator.pop(context);
+                    Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context)=>StartScreen()), (route) => false);
                   }
               ),
               actions: <Widget>[
@@ -107,7 +111,7 @@ class _SwitchDashBoardState extends State<SwitchDashBoard> {
                       height: 400,
                       width: double.infinity,
                       child: StreamBuilder(
-                          stream: userRef.child('devices').onValue,
+                          stream: userRef.child('users/${widget.uid}').child('devices').onValue,
                           builder: (context , event) {
                             if(event.connectionState == ConnectionState.active){
                               if(event.data.snapshot.value != null) {
@@ -125,7 +129,7 @@ class _SwitchDashBoardState extends State<SwitchDashBoard> {
                                         ),
                                         secondary: event.data.snapshot.value[val] ? Icon(Icons.flash_on , color: Colors.yellow, size: 22.5) : Icon(Icons.flash_off, size: 20),
                                         onChanged: userAuth == false ? null : (bool value) {
-                                          userRef.child('devices/$val').set(value);
+                                          userRef.child('users/${widget.uid}').child('devices/$val').set(value);
                                           print(value);
                                         },
                                       )
@@ -149,7 +153,7 @@ class _SwitchDashBoardState extends State<SwitchDashBoard> {
                     ),
                     FlatButton(
                       onPressed: () {
-                        userRef.child('isAuthenticated').set(false);
+                        userRef.child('users/${widget.uid}').child('isAuthenticated').set(false);
                       },
                       child: Container(
                         width: double.infinity,
