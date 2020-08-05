@@ -53,6 +53,17 @@ class _SwitchDashBoardState extends State<SwitchDashBoard> {
     );
   }
   @override
+  void initState() {
+    super.initState();
+    userRef.child('isAuthenticated').onValue.listen((event) {
+      var snapshot = event.snapshot;
+      setState(() {
+        userAuth = snapshot.value;
+      });
+    });
+    print(userAuth);
+  }
+  @override
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
@@ -60,6 +71,7 @@ class _SwitchDashBoardState extends State<SwitchDashBoard> {
               backgroundColor: Color(0xff008f30),
               title: Text('Dashboard'),
               leading: IconButton(
+                  tooltip: 'Log Out',
                   icon: Icon(Icons.exit_to_app),
                   onPressed: () {
                     AuthService.signOutUser();
@@ -68,18 +80,7 @@ class _SwitchDashBoardState extends State<SwitchDashBoard> {
               ),
               actions: <Widget>[
                 IconButton(
-                    icon: Icon(Icons.record_voice_over),
-                    onPressed: () {
-                      userRef.child('isAuthenticated').onValue.listen((event) {
-                        var snapshot = event.snapshot;
-                        setState(() {
-                          userAuth = snapshot.value;
-                        });
-                      });
-                      print(userAuth);
-                    }
-                ),
-                IconButton(
+                  tooltip: 'Add Device',
                   icon: Icon(Icons.add),
                   onPressed: (){
                     createAlertDialog(context);
@@ -90,13 +91,14 @@ class _SwitchDashBoardState extends State<SwitchDashBoard> {
             body: Padding(
               padding: EdgeInsets.symmetric(vertical: 15 , horizontal: 10),
               child: Center(
-                child: ListView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
-                    SizedBox(height: 10,),
                     Text(
-                        'Your Auth Status: ${userAuth == null ? 'Click on listen to see' : userAuth }',
+                        'Your RFID Auth Status: ${userAuth == true ? 'Authenticated' : 'Not Authenticated' }',
                         style: TextStyle(
                           fontSize: 20,
+                          fontWeight: FontWeight.w500
                         ),
                       textAlign: TextAlign.center,
                     ),
@@ -104,12 +106,47 @@ class _SwitchDashBoardState extends State<SwitchDashBoard> {
                     Container(
                       height: 400,
                       width: double.infinity,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: <Widget>[],
+                      child: StreamBuilder(
+                          stream: userRef.child('devices').onValue,
+                          builder: (context , event) {
+                            if(event.connectionState == ConnectionState.active){
+                              if(event.data.snapshot.value != null) {
+                                List<Widget> devices = [];
+                                for (var val in event.data.snapshot.value.keys){
+                                  devices.add(
+                                      SwitchListTile(
+                                        value: event.data.snapshot.value[val],
+                                        title: Text(
+                                            '$val , Status: ${event.data.snapshot.value[val] ? 'ON' : 'OFF'}',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.w500,
+                                                fontSize: 17.5
+                                            )
+                                        ),
+                                        secondary: event.data.snapshot.value[val] ? Icon(Icons.flash_on , color: Colors.yellow, size: 22.5) : Icon(Icons.flash_off, size: 20),
+                                        onChanged: userAuth == false ? null : (bool value) {
+                                          userRef.child('devices/$val').set(value);
+                                          print(value);
+                                        },
+                                      )
+                                  );
+                                }
+                                return ListView(
+                                    children: devices
+                                );
+                              }
+                              else return Center(
+                                  child: Text(
+                                    'No devices registered',
+                                    style: TextStyle(fontWeight: FontWeight.w600 , color: Color(0xffa3a3a3) , fontSize: 22.5),
+                                  ));
+                            }
+                            else {
+                              return Center(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Color(0xff007d2a))));
+                            }
+                          },
                       ),
                     ),
-                    SizedBox(height: 10,),
                     FlatButton(
                       onPressed: () {
                         userRef.child('isAuthenticated').set(false);
