@@ -1,16 +1,8 @@
-# warehouseautomationflutter
+# :house: Home Automation Flutter App :iphone:
+A flutter app for automating the control of home and warehouse machines and appliances. 
 
-A flutter app for automating the control of warehouse machines and appliances.
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Working
+  1. Register at app using an E-Mail and Password. If already registered, then login to app.
+  2. Add your devices. Program your Wemos D1 mini for number of devices according to your user uid that is given by Firebase itself.
+  3. Check your RFID authentication status in app. If unauthenticated, then use RFID at EM-18 Reader Module.
+  4. Control the devices accordingly. Revoke RFID authentication right way from the app to remove control from devices.
