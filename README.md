@@ -6,3 +6,5 @@ A flutter app for automating the control of home and warehouse machines and appl
   2. Add your devices. Program your Wemos D1 mini for number of devices according to your user uid that is given by Firebase itself.
   3. Check your RFID authentication status in app. If unauthenticated, then use RFID at EM-18 Reader Module.
   4. Control the devices accordingly. Revoke RFID authentication right way from the app to remove control from devices.
+
+###### Drop a star on repository, if you like it :pray: :v:
